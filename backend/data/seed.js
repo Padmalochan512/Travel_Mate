@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 
+dotenv.config({ path: require('path').join(__dirname, '..', '.env') });
 dotenv.config();
 
 // Connect to MongoDB

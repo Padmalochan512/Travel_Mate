@@ -113,7 +113,8 @@ export const placesAPI = {
   getFeed: (params) => api.get('/places/feed', { params }),
   getById: (id) => api.get(`/places/${id}`),
   getCategories: () => api.get('/places/categories'),
-  getNearbyAttractions: (id) => api.get(`/places/${id}/nearby`)
+  getNearbyAttractions: (id) => api.get(`/places/${id}/nearby`),
+  create: (data) => api.post('/places', data)
 };
 
 // Hotels API

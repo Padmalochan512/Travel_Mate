@@ -62,6 +62,24 @@ const Navbar = ({ toggleDarkMode, isDark }) => {
                             </Link>
                         ))}
 
+                        <Link
+                            to="/trip-planner"
+                            className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${location.pathname === '/trip-planner'
+                                ? 'bg-primary-500 text-white'
+                                : 'text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800'
+                                }`}
+                        >
+                            Trip Planner
+                        </Link>
+
+                        {/* Add Place Shortcut */}
+                        <Link
+                            to="/explore?add=true"
+                            className="flex items-center space-x-1.5 px-3 py-1.5 bg-gradient-to-r from-primary-500 to-indigo-600 hover:from-primary-600 hover:to-indigo-700 text-white text-xs font-semibold rounded-lg shadow-sm shadow-primary-500/25 transition-all"
+                        >
+                            <span>+ Add Place</span>
+                        </Link>
+
                         {/* Theme Toggle */}
                         <button
                             onClick={toggleDarkMode}
@@ -147,6 +165,26 @@ const Navbar = ({ toggleDarkMode, isDark }) => {
                                 <span>{link.name}</span>
                             </Link>
                         ))}
+
+                        <Link
+                            to="/trip-planner"
+                            onClick={() => setIsOpen(false)}
+                            className={`flex items-center space-x-3 px-4 py-3 rounded-lg ${location.pathname === '/trip-planner'
+                                ? 'bg-primary-500 text-white'
+                                : 'text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800'
+                                }`}
+                        >
+                            <FiCompass className="w-5 h-5" />
+                            <span>Trip Planner</span>
+                        </Link>
+
+                        <Link
+                            to="/explore?add=true"
+                            onClick={() => setIsOpen(false)}
+                            className="flex items-center justify-center space-x-2 px-4 py-3 bg-gradient-to-r from-primary-500 to-indigo-600 text-white rounded-xl font-semibold shadow-md shadow-primary-500/20"
+                        >
+                            <span>+ Add New Location</span>
+                        </Link>
 
                         {isAuthenticated ? (
                             <>

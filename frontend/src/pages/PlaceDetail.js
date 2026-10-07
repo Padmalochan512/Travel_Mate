@@ -69,15 +69,6 @@ const PlaceDetail = ({ userLocation }) => {
             console.error('Error getting route:', error);
             // Fallback: try direct distance calculation
             if (placeData?.location?.coordinates && userLoc) {
-                const R = 6371; // Earth's radius in km
-                const dLat = (placeData.location.coordinates[1] - userLoc.lat) * Math.PI / 180;
-                const dLon = (placeData.location.coordinates[0] - userLoc.lng) * Math.PI / 180;
-                const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
-                    Math.cos(userLoc.lat * Math.PI / 180) * Math.cos(placeData.location.coordinates[1] * Math.PI / 180) *
-                    Math.sin(dLon/2) * Math.sin(dLon/2);
-                const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-                const distance = R * c;
-                const duration = Math.round((distance / 30) * 60); // Assume 30 km/h avg speed
                 setShowRoute(true);
             }
         } finally {

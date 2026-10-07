@@ -170,7 +170,54 @@ exports.getAllPlaces = async (req, res) => {
 // @route POST /api/places
 exports.createPlace = async (req, res) => {
     try {
-        const place = await Place.create(req.body);
+        const data = { ...req.body };
+
+        // Normalize images
+        if (typeof data.images === 'string') {
+            data.images = data.images.split(',').map(url => ({ url: url.trim() })).filter(img => img.url);
+        } else if (Array.isArray(data.images)) {
+            data.images = data.images.map(img => {
+                if (typeof img === 'string') return { url: img };
+                return img;
+            });
+        }
+        if (!data.images || data.images.length === 0) {
+            data.images = [{ url: 'https://images.unsplash.com/photo-1596401057633-54a8fe8ef647?w=800' }];
+        }
+
+        // Normalize coordinates & location
+        const lat = parseFloat(data.latitude || (data.location?.coordinates && data.location.coordinates[1]));
+        const lng = parseFloat(data.longitude || (data.location?.coordinates && data.location.coordinates[0]));
+
+        if (!isNaN(lat) && !isNaN(lng)) {
+            data.location = {
+                type: 'Point',
+                coordinates: [lng, lat],
+                address: data.address || data.location?.address || 'Bhubaneswar, Odisha',
+                city: data.city || data.location?.city || 'Bhubaneswar',
+                state: data.state || data.location?.state || 'Odisha',
+                pincode: data.pincode || data.location?.pincode || ''
+            };
+        } else if (!data.location || !Array.isArray(data.location.coordinates)) {
+            // Default to Bhubaneswar center coordinates if missing
+            data.location = {
+                type: 'Point',
+                coordinates: [85.8245, 20.2961],
+                address: data.address || 'Bhubaneswar, Odisha',
+                city: data.city || 'Bhubaneswar',
+                state: 'Odisha'
+            };
+        }
+
+        if (!data.shortDescription && data.description) {
+            data.shortDescription = data.description.length > 150 ? data.description.substring(0, 147) + '...' : data.description;
+        }
+
+        if (req.user) {
+            data.createdBy = req.user._id;
+        }
+
+        const place = await Place.create(data);
         res.status(201).json({ success: true, data: place });
     } catch (error) {
         if (error.name === 'ValidationError') {
